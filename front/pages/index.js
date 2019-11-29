@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
@@ -9,16 +9,20 @@ const Home = () => {
   const { me } = useSelector(state => state.user);
   const { mainPosts, hasMorePost } = useSelector(state => state.post);
   const dispatch = useDispatch();
+  const countRef = useRef([]);
   const onScroll = () => {
     if(window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight -250){
       if(hasMorePost){
-        dispatch({
-          type: LOAD_MAIN_POSTS_REQUEST,
-          lastId: mainPosts[mainPosts.length -1].id,
-        });
+        let lastId = mainPosts[mainPosts.length -1].id;
+        if(!countRef.current.includes(lastId)){
+          dispatch({
+            type: LOAD_MAIN_POSTS_REQUEST,
+            lastId
+          });
+          countRef.current.push(lastId);
+        }
       }
     }
-    console.log(mainPosts[mainPosts.length -1].id);
   };
 
   useEffect(() => {
@@ -33,7 +37,7 @@ const Home = () => {
       {me && <PostForm />}
       {mainPosts.map((c) => {
         return (
-          <PostCard key={c} post={c} />
+          <PostCard key={c.id} post={c} />
         );
       })}
     </div>

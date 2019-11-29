@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOAD_HASHTAG_POSTS_REQUEST } from '../reducers/post';
@@ -6,17 +6,23 @@ import PostCard from '../components/PostCard';
 
 const Hashtag = ({ tag }) => {
   const dispatch = useDispatch();
+  const countRef = useRef([]);
 
   const { mainPosts, hasMorePost } = useSelector(state => state.post);
 
   const onScroll = useCallback(() => {
     if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
       if (hasMorePost) {
-        dispatch({
-          type: LOAD_HASHTAG_POSTS_REQUEST,
-          lastId: mainPosts[mainPosts.length - 1].id,
-          data: tag,
-        });
+          let lastId = mainPosts[mainPosts.length -1].id;
+          if(!countRef.current.includes(lastId)){
+            dispatch({
+                type: LOAD_HASHTAG_POSTS_REQUEST,
+                lastId,
+                data: tag,
+              });
+              countRef.current.push(lastId);
+          }
+          console.log('라스트아이디 찾기',mainPosts[mainPosts.length -1].id);
       }
     }
   }, [hasMorePost, mainPosts.length]);
@@ -43,7 +49,6 @@ Hashtag.propTypes = {
 
 Hashtag.getInitialProps = async (context) => {
   const tag = context.query.tag;
-  console.log('hashtag getInitialProps', tag);
   context.store.dispatch({
     type: LOAD_HASHTAG_POSTS_REQUEST,
     data: tag,

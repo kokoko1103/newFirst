@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -110,11 +110,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(antd__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-slick */ "react-slick");
 /* harmony import */ var react_slick__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_slick__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_4__);
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
+
+const Overlay = styled_components__WEBPACK_IMPORTED_MODULE_4___default.a.div`
+  position: fixed;
+  z-index: 5000;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+`;
+const Header = styled_components__WEBPACK_IMPORTED_MODULE_4___default.a.header`
+  height:44;
+  background: white;
+  position: relative;
+  padding:0;
+  text-align: center;
+`;
+const H1 = styled_components__WEBPACK_IMPORTED_MODULE_4___default.a.h1`
+  margin:0;
+  font-size: 17px;
+  color: #333;
+  line-height: 44px
+`;
+const HeaderIcon = styled_components__WEBPACK_IMPORTED_MODULE_4___default()(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"])`
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15;
+  line-height: 14px;
+  cursor: pointer;
+`;
 
 const ImagesZoom = ({
   images,
@@ -124,41 +156,9 @@ const ImagesZoom = ({
     0: currentSlide,
     1: setCurrentSlide
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0);
-  return __jsx("div", {
-    style: {
-      position: 'fixed',
-      zIndex: 5000,
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0
-    }
-  }, __jsx("header", {
-    style: {
-      height: 44,
-      background: 'white',
-      position: 'relative',
-      padding: 0,
-      textAlign: 'center'
-    }
-  }, __jsx("h1", {
-    style: {
-      margin: 0,
-      fontSize: '17px',
-      color: '#333',
-      lineHeight: '44px'
-    }
-  }, "\uC0C1\uC138 \uC774\uBBF8\uC9C0"), __jsx(antd__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
+  return __jsx(Overlay, null, __jsx(Header, null, __jsx(H1, null, "\uC0C1\uC138 \uC774\uBBF8\uC9C0"), __jsx(HeaderIcon, {
     type: "close",
-    onClick: onClose,
-    style: {
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      padding: 15,
-      lineHeight: '14px',
-      cursor: 'pointer'
-    }
+    onClick: onClose
   })), __jsx("div", {
     style: {
       height: 'calc(100% - 44px)',
@@ -346,7 +346,6 @@ const PostCard = ({
     });
   });
   return __jsx("div", null, __jsx(antd__WEBPACK_IMPORTED_MODULE_1__["Card"], {
-    key: +post.createdAt,
     cover: post.Images && post.Images[0] && __jsx(_PostImages__WEBPACK_IMPORTED_MODULE_6__["default"], {
       images: post.Images
     }),
@@ -448,7 +447,7 @@ PostCard.propTypes = {
     User: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object,
     content: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string,
     img: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string,
-    createdAt: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object
+    createdAt: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string
   }).isRequired
 };
 /* harmony default export */ __webpack_exports__["default"] = (PostCard);
@@ -2549,18 +2548,22 @@ const Home = () => {
     hasMorePost
   } = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useSelector"])(state => state.post);
   const dispatch = Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["useDispatch"])();
+  const countRef = Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])([]);
 
   const onScroll = () => {
     if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 250) {
       if (hasMorePost) {
-        dispatch({
-          type: _reducers_post__WEBPACK_IMPORTED_MODULE_4__["LOAD_MAIN_POSTS_REQUEST"],
-          lastId: mainPosts[mainPosts.length - 1].id
-        });
+        let lastId = mainPosts[mainPosts.length - 1].id;
+
+        if (!countRef.current.includes(lastId)) {
+          dispatch({
+            type: _reducers_post__WEBPACK_IMPORTED_MODULE_4__["LOAD_MAIN_POSTS_REQUEST"],
+            lastId
+          });
+          countRef.current.push(lastId);
+        }
       }
     }
-
-    console.log(mainPosts[mainPosts.length - 1].id);
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
@@ -2571,7 +2574,7 @@ const Home = () => {
   }, [mainPosts.length]);
   return __jsx("div", null, me && __jsx(_components_PostForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), mainPosts.map(c => {
     return __jsx(_components_PostCard__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      key: c,
+      key: c.id,
       post: c
     });
   }));
@@ -2593,7 +2596,7 @@ Home.getInitialProps = async context => {
 /*!**************************!*\
   !*** ./reducers/post.js ***!
   \**************************/
-/*! exports provided: initialState, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, REMOVE_IMAGE, ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, default */
+/*! exports provided: initialState, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, REMOVE_IMAGE, ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2633,30 +2636,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_REQUEST", function() { return REMOVE_POST_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_SUCCESS", function() { return REMOVE_POST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_FAILURE", function() { return REMOVE_POST_FAILURE; });
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-
-
-
-
-
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default()(object); if (_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default.a) { var symbols = _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default()(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(source).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_REQUEST", function() { return LOAD_POST_REQUEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_SUCCESS", function() { return LOAD_POST_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_FAILURE", function() { return LOAD_POST_FAILURE; });
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "immer");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
 
 const initialState = {
   mainPosts: [],
@@ -2672,7 +2656,7 @@ const initialState = {
   isAddingComment: false,
   addCommentErrorReason: '',
   commentAdded: false,
-  hasMorePost: false
+  singlePost: null
 };
 const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
 const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
@@ -2708,222 +2692,201 @@ const RETWEET_FAILURE = 'RETWEET_FAILURE';
 const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 /* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
-  switch (action.type) {
-    case UPLOAD_IMAGES_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+  return immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
+    switch (action.type) {
+      case UPLOAD_IMAGES_REQUEST:
+        {
+          break;
+        }
 
-    case UPLOAD_IMAGES_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          imagePaths: [...state.imagePaths, ...action.data]
-        });
-      }
+      case UPLOAD_IMAGES_SUCCESS:
+        {
+          action.data.forEach(p => {
+            draft.imagePaths.push(p);
+          });
+          break;
+        }
 
-    case UPLOAD_IMAGES_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case UPLOAD_IMAGES_FAILURE:
+        {
+          break;
+        }
 
-    case REMOVE_IMAGE:
-      {
-        return _objectSpread({}, state, {
-          imagePaths: state.imagePaths.filter((v, i) => i !== action.index)
-        });
-      }
+      case REMOVE_IMAGE:
+        {
+          const index = draft.imagePaths.findIndex((v, i) => i === action.index);
+          draft.imagePaths.splice(index, 1);
+          break;
+        }
 
-    case ADD_POST_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: true,
-          addPostErrorReason: '',
-          postAdded: false
-        });
-      }
+      case ADD_POST_REQUEST:
+        {
+          draft.isAddingPost = true;
+          draft.addingPostErrorReason = '';
+          draft.postAdded = false;
+          break;
+        }
 
-    case ADD_POST_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: false,
-          mainPosts: [action.data, ...state.mainPosts],
-          postAdded: true,
-          imagePaths: []
-        });
-      }
+      case ADD_POST_SUCCESS:
+        {
+          draft.isAddingPost = false;
+          draft.mainPosts.unshift(action.data);
+          draft.postAdded = true;
+          draft.imagePaths = [];
+          break;
+        }
 
-    case ADD_POST_FAILURE:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: false,
-          addPostErrorReason: action.error
-        });
-      }
+      case ADD_POST_FAILURE:
+        {
+          draft.isAddingPost = false;
+          draft.addPostErrorReason = action.error;
+          break;
+        }
 
-    case ADD_COMMENT_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          isAddingComment: true,
-          addCommentErrorReason: '',
-          commentAdded: false
-        });
-      }
+      case ADD_COMMENT_REQUEST:
+        {
+          draft.isAddingComment = true;
+          draft.addCommentErrorReason = '';
+          draft.commentAdded = false;
+          break;
+        }
 
-    case ADD_COMMENT_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Comments = [...post.Comments, action.data.comment];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Comments
-        });
-        return _objectSpread({}, state, {
-          isAddingComment: false,
-          mainPosts,
-          commentAdded: true
-        });
-      }
+      case ADD_COMMENT_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Comments.push(action.data.comment);
+          draft.isAddingComment = false;
+          draft.commentAdded = true;
+          break;
+        }
 
-    case ADD_COMMENT_FAILURE:
-      {
-        return _objectSpread({}, state, {
-          isAddingComment: false,
-          addCommentErrorReason: action.error
-        });
-      }
+      case ADD_COMMENT_FAILURE:
+        {
+          draft.isAddingComment = false;
+          draft.addingPostErrorReason = action.error;
+          break;
+        }
 
-    case LOAD_COMMENTS_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Comments = action.data.comments;
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Comments
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case LOAD_COMMENTS_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Comments = action.data.comments;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_REQUEST:
-    case LOAD_HASHTAG_POSTS_REQUEST:
-    case LOAD_USER_POSTS_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: action.lastId === 0 ? [] : state.mainPosts,
-          hasMorePost: action.lastId ? state.hasMorePost : true
-        });
-      }
+      case LOAD_MAIN_POSTS_REQUEST:
+      case LOAD_HASHTAG_POSTS_REQUEST:
+      case LOAD_USER_POSTS_REQUEST:
+        {
+          draft.mainPosts = !action.lastId ? [] : draft.mainPosts;
+          draft.hasMorePost = action.lastId ? draft.hasMorePost : true;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_SUCCESS:
-    case LOAD_HASHTAG_POSTS_SUCCESS:
-    case LOAD_USER_POSTS_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: state.mainPosts.concat(action.data),
-          hasMorePost: action.data.length === 10
-        });
-      }
+      case LOAD_MAIN_POSTS_SUCCESS:
+      case LOAD_HASHTAG_POSTS_SUCCESS:
+      case LOAD_USER_POSTS_SUCCESS:
+        {
+          action.data.forEach(d => {
+            draft.mainPosts.push(d);
+          });
+          draft.hasMorePost = action.data.length === 10;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_FAILURE:
-    case LOAD_HASHTAG_POSTS_FAILURE:
-    case LOAD_USER_POSTS_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case LOAD_MAIN_POSTS_FAILURE:
+      case LOAD_HASHTAG_POSTS_FAILURE:
+      case LOAD_USER_POSTS_FAILURE:
+        {
+          break;
+        }
 
-    case LIKE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case LIKE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case LIKE_POST_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Likers = [{
-          id: action.data.userId
-        }, ...post.Likers];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Likers
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case LIKE_POST_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Likers.unshift({
+            id: action.data.userId
+          });
+          break;
+        }
 
-    case LIKE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case LIKE_POST_FAILURE:
+        {
+          break;
+        }
 
-    case UNLIKE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case UNLIKE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case UNLIKE_POST_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Likers = post.Likers.filter(v => v.id !== action.data.userId);
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Likers
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case UNLIKE_POST_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          const likeIndex = draft.mainPosts[postIndex].Likers.findIndex(v => v.id === action.data.userId);
+          draft.mainPosts[postIndex].Likers.splice(likeIndex, 1);
+          break;
+        }
 
-    case UNLIKE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case UNLIKE_POST_FAILURE:
+        {
+          break;
+        }
 
-    case RETWEET_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case RETWEET_REQUEST:
+        {
+          break;
+        }
 
-    case RETWEET_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: [action.data, ...state.mainPosts]
-        });
-      }
+      case RETWEET_SUCCESS:
+        {
+          draft.mainPosts.unshift(action.data);
+          break;
+        }
 
-    case RETWEET_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case RETWEET_FAILURE:
+        {
+          break;
+        }
 
-    case REMOVE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case REMOVE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case REMOVE_POST_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: state.mainPosts.filter(v => v.id !== action.data)
-        });
-      }
+      case REMOVE_POST_SUCCESS:
+        {
+          const index = draft.mainPosts.findIndex(v => v.id === action.data);
+          draft.mainPosts.splice(index, 1);
+          break;
+        }
 
-    case REMOVE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case REMOVE_POST_FAILURE:
+        {
+          break;
+        }
 
-    default:
-      {
-        return _objectSpread({}, state);
-      }
-  }
+      case LOAD_POST_SUCCESS:
+        {
+          draft.singlePost = action.data;
+          break;
+        }
+
+      default:
+        {
+          break;
+        }
+    }
+  });
 });
 
 /***/ }),
@@ -2932,7 +2895,7 @@ const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 /*!**************************!*\
   !*** ./reducers/user.js ***!
   \**************************/
-/*! exports provided: initialState, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, FOLLOW_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, EDIT_NICKNAME_REQUEST, EDIT_NICKNAME_SUCCESS, EDIT_NICKNAME_FAILURE, ADD_POST_TO_ME, REMOVE_POST_TO_ME, default */
+/*! exports provided: initialState, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, FOLLOW_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, EDIT_NICKNAME_REQUEST, EDIT_NICKNAME_SUCCESS, EDIT_NICKNAME_FAILURE, ADD_POST_TO_ME, REMOVE_POST_OF_ME, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2969,7 +2932,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_NICKNAME_SUCCESS", function() { return EDIT_NICKNAME_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_NICKNAME_FAILURE", function() { return EDIT_NICKNAME_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_POST_TO_ME", function() { return ADD_POST_TO_ME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_TO_ME", function() { return REMOVE_POST_TO_ME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_OF_ME", function() { return REMOVE_POST_OF_ME; });
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
@@ -3059,7 +3022,7 @@ const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
 const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
-const REMOVE_POST_TO_ME = 'REMOVE_POST_TO_ME';
+const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 /* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
   switch (action.type) {
     case LOG_IN_REQUEST:
@@ -3203,7 +3166,7 @@ const REMOVE_POST_TO_ME = 'REMOVE_POST_TO_ME';
         });
       }
 
-    case REMOVE_POST_TO_ME:
+    case REMOVE_POST_OF_ME:
       {
         return _objectSpread({}, state, {
           me: _objectSpread({}, state.me, {
@@ -3307,7 +3270,7 @@ const REMOVE_POST_TO_ME = 'REMOVE_POST_TO_ME';
 
 /***/ }),
 
-/***/ 4:
+/***/ 5:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
@@ -3462,6 +3425,17 @@ module.exports = require("crypto");
 
 /***/ }),
 
+/***/ "immer":
+/*!************************!*\
+  !*** external "immer" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("immer");
+
+/***/ }),
+
 /***/ "prop-types":
 /*!*****************************!*\
   !*** external "prop-types" ***!
@@ -3525,6 +3499,17 @@ module.exports = require("react-redux");
 /***/ (function(module, exports) {
 
 module.exports = require("react-slick");
+
+/***/ }),
+
+/***/ "styled-components":
+/*!************************************!*\
+  !*** external "styled-components" ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("styled-components");
 
 /***/ }),
 

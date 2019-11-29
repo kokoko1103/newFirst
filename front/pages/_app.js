@@ -6,6 +6,8 @@ import withReduxSaga from 'next-redux-saga';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
+import Helmet from 'react-helmet';
+import {Container} from 'next/app'
 
 import AppLayout from '../components/AppLayout';
 import reducer from '../reducers';
@@ -15,15 +17,40 @@ import axios from 'axios';
 
 const NodeBird = ({ Component, store, pageProps }) => {
   return (
-    <Provider store={store}>
-      <Head>
-        <title>일단 가보자</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css" />
-      </Head>
-      <AppLayout>
-        <Component {...pageProps}/>
-      </AppLayout>
-    </Provider>
+    <Container>
+      <Provider store={store}>
+        <Helmet
+          title= "일단 가보자"
+          htmlAttributes= {{ lang: 'ko' }}
+          meta= {[{
+            charSet: 'UTF-8'
+          },{
+            name: 'viewport',
+            content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover',
+          },{
+            'http-equiv': 'X-UA-Compatible', content: 'IE=edge',
+          },{
+            name: 'description', content: '지역활성화 SNS'
+          },{
+            name: 'og.title', content: 'DOUNT'
+          },{
+            name: 'og.description', content: '지역활성화 SNS'
+          },{
+            property: 'og.type', content: 'website'
+          }]}
+          link={[{
+            rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css',
+          }, {
+            rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css',
+          }, {
+            rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css',
+          }]}
+        />
+        <AppLayout>
+          <Component {...pageProps}/>
+        </AppLayout>
+      </Provider>
+    </Container>
   );
 };
 
@@ -47,7 +74,7 @@ NodeBird.getInitialProps = async (context) => {
     })
   }
   if(context.Component.getInitialProps){
-    pageProps = await context.Component.getInitialProps(ctx);
+    pageProps = await context.Component.getInitialProps(ctx) || {};
   }
   
   return { pageProps };

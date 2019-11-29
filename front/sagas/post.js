@@ -21,17 +21,21 @@ import {
   LOAD_MAIN_POSTS_SUCCESS,
   LOAD_USER_POSTS_FAILURE,
   LOAD_USER_POSTS_REQUEST,
-  LOAD_USER_POSTS_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS,
-  UNLIKE_POST_FAILURE, UNLIKE_POST_REQUEST,
+  LOAD_USER_POSTS_SUCCESS,
+  REMOVE_POST_FAILURE,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
+  RETWEET_FAILURE,
+  RETWEET_REQUEST,
+  RETWEET_SUCCESS,
+  UNLIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST,
   UNLIKE_POST_SUCCESS,
   UPLOAD_IMAGES_FAILURE,
   UPLOAD_IMAGES_REQUEST,
-  UPLOAD_IMAGES_SUCCESS,
-  REMOVE_POST_SUCCESS,
-  REMOVE_POST_FAILURE,
-  REMOVE_POST_REQUEST,
+  UPLOAD_IMAGES_SUCCESS, LOAD_POST_SUCCESS, LOAD_POST_FAILURE, LOAD_POST_REQUEST,
 } from '../reducers/post';
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
 function addPostAPI(postData) {
   return axios.post('/post', postData, {
@@ -63,7 +67,6 @@ function* watchAddPost() {
 }
 
 function loadMainPostsAPI(lastId = 0, limit = 10) {
-  console.log('last아이디',lastId);
   return axios.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
 
@@ -83,11 +86,10 @@ function* loadMainPosts(action) {
 }
 
 function* watchLoadMainPosts() {
-  yield throttle(2000,LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
+  yield throttle(2000, LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
-function loadHashtagPostsAPI(tag, lastId = 0) {
-  console.log('lastId',lastId);
+function loadHashtagPostsAPI(tag, lastId=0) {
   return axios.get(`/hashtag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=10`);
 }
 
@@ -97,7 +99,6 @@ function* loadHashtagPosts(action) {
     yield put({
       type: LOAD_HASHTAG_POSTS_SUCCESS,
       data: result.data,
-      lastId: action.lastId,
     });
   } catch (e) {
     yield put({
@@ -301,15 +302,15 @@ function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
 
-function removeAPI(postId) {
+function removePostAPI(postId) {
   return axios.delete(`/post/${postId}`, {
     withCredentials: true,
   });
 }
 
-function* remove(action) {
+function* removePost(action) {
   try {
-    const result = yield call(removeAPI, action.data);
+    const result = yield call(removePostAPI, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
       data: result.data,
@@ -317,7 +318,7 @@ function* remove(action) {
     yield put({
       type: REMOVE_POST_OF_ME,
       data: result.data,
-    })
+    });
   } catch (e) {
     console.error(e);
     yield put({
@@ -327,8 +328,32 @@ function* remove(action) {
   }
 }
 
-function* watchRemove() {
-  yield takeLatest(REMOVE_POST_REQUEST, remove);
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
+}
+
+function loadPostAPI(postId) {
+  return axios.get(`/post/${postId}`);
+}
+
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    console.error(e);
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: e,
+    });
+  }
+}
+
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
 }
 
 export default function* postSaga() {
@@ -343,6 +368,7 @@ export default function* postSaga() {
     fork(watchLikePost),
     fork(watchUnlikePost),
     fork(watchRetweet),
-    fork(watchRemove),
+    fork(watchRemovePost),
+    fork(watchLoadPost),
   ]);
 }

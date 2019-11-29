@@ -114,8 +114,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _LoginForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./LoginForm */ "./components/LoginForm.js");
 /* harmony import */ var _UserProfile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./UserProfile */ "./components/UserProfile.js");
-/* harmony import */ var _reducers_user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../reducers/user */ "./reducers/user.js");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _reducers_user__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../reducers/user */ "./reducers/user.js");
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -136,10 +139,20 @@ const AppLayout = ({
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
     if (!me) {
       dispatch({
-        type: _reducers_user__WEBPACK_IMPORTED_MODULE_7__["LOAD_USER_REQUEST"]
+        type: _reducers_user__WEBPACK_IMPORTED_MODULE_8__["LOAD_USER_REQUEST"]
       });
     }
   }, []);
+
+  const onSearch = value => {
+    next_router__WEBPACK_IMPORTED_MODULE_7___default.a.push({
+      pathname: '/hashtag',
+      query: {
+        tag: value
+      }
+    }, `/hashtag/${value}`);
+  };
+
   return __jsx("div", null, __jsx(antd__WEBPACK_IMPORTED_MODULE_3__["Menu"], {
     mode: "horizontal"
   }, __jsx(antd__WEBPACK_IMPORTED_MODULE_3__["Menu"].Item, {
@@ -156,7 +169,8 @@ const AppLayout = ({
     enterButton: true,
     style: {
       verticalAlign: 'middle'
-    }
+    },
+    onSearch: onSearch
   }))), __jsx(antd__WEBPACK_IMPORTED_MODULE_3__["Row"], {
     gutter: 8
   }, __jsx(antd__WEBPACK_IMPORTED_MODULE_3__["Col"], {
@@ -425,6 +439,55 @@ module.exports = __webpack_require__(/*! core-js/library/fn/weak-map */ "core-js
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _Promise = __webpack_require__(/*! ../core-js/promise */ "./node_modules/@babel/runtime-corejs2/core-js/promise.js");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    _Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new _Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js ***!
@@ -566,6 +629,18 @@ function _interopRequireWildcard(obj) {
 }
 
 module.exports = _interopRequireWildcard;
+
+/***/ }),
+
+/***/ "./node_modules/next/app.js":
+/*!**********************************!*\
+  !*** ./node_modules/next/app.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./dist/pages/_app */ "./node_modules/next/dist/pages/_app.js")
+
 
 /***/ }),
 
@@ -2087,6 +2162,150 @@ exports.SUPPORTS_PERFORMANCE_USER_TIMING = exports.SUPPORTS_PERFORMANCE && typeo
 
 /***/ }),
 
+/***/ "./node_modules/next/dist/pages/_app.js":
+/*!**********************************************!*\
+  !*** ./node_modules/next/dist/pages/_app.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "./node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.Container = Container;
+exports.createUrl = createUrl;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/extends */ "./node_modules/@babel/runtime-corejs2/helpers/extends.js"));
+
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/asyncToGenerator */ "./node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+var _utils = __webpack_require__(/*! ../next-server/lib/utils */ "./node_modules/next/dist/next-server/lib/utils.js");
+
+exports.AppInitialProps = _utils.AppInitialProps;
+/**
+* `App` component is used for initialize of pages. It allows for overwriting and full control of the `page` initialization.
+* This allows for keeping state between navigation, custom error handling, injecting additional data.
+*/
+
+function appGetInitialProps(_x) {
+  return _appGetInitialProps.apply(this, arguments);
+}
+
+function _appGetInitialProps() {
+  _appGetInitialProps = (0, _asyncToGenerator2.default)(function* (_ref) {
+    var {
+      Component,
+      ctx
+    } = _ref;
+    var pageProps = yield (0, _utils.loadGetInitialProps)(Component, ctx);
+    return {
+      pageProps
+    };
+  });
+  return _appGetInitialProps.apply(this, arguments);
+}
+
+class App extends _react.default.Component {
+  // Kept here for backwards compatibility.
+  // When someone ended App they could call `super.componentDidCatch`.
+  // @deprecated This method is no longer needed. Errors are caught at the top level
+  componentDidCatch(error, _errorInfo) {
+    throw error;
+  }
+
+  render() {
+    var {
+      router,
+      Component,
+      pageProps
+    } = this.props;
+    var url = createUrl(router);
+    return _react.default.createElement(Component, (0, _extends2.default)({}, pageProps, {
+      url: url
+    }));
+  }
+
+}
+
+exports.default = App;
+App.origGetInitialProps = appGetInitialProps;
+App.getInitialProps = appGetInitialProps;
+var warnContainer;
+var warnUrl;
+
+if (true) {
+  warnContainer = (0, _utils.execOnce)(() => {
+    console.warn("Warning: the `Container` in `_app` has been deprecated and should be removed. https://err.sh/zeit/next.js/app-container-deprecated");
+  });
+  warnUrl = (0, _utils.execOnce)(() => {
+    console.error("Warning: the 'url' property is deprecated. https://err.sh/zeit/next.js/url-deprecated");
+  });
+} // @deprecated noop for now until removal
+
+
+function Container(p) {
+  if (true) warnContainer();
+  return p.children;
+}
+
+function createUrl(router) {
+  // This is to make sure we don't references the router object at call time
+  var {
+    pathname,
+    asPath,
+    query
+  } = router;
+  return {
+    get query() {
+      if (true) warnUrl();
+      return query;
+    },
+
+    get pathname() {
+      if (true) warnUrl();
+      return pathname;
+    },
+
+    get asPath() {
+      if (true) warnUrl();
+      return asPath;
+    },
+
+    back: () => {
+      if (true) warnUrl();
+      router.back();
+    },
+    push: (url, as) => {
+      if (true) warnUrl();
+      return router.push(url, as);
+    },
+    pushTo: (href, as) => {
+      if (true) warnUrl();
+      var pushRoute = as ? href : '';
+      var pushUrl = as || href;
+      return router.push(pushRoute, pushUrl);
+    },
+    replace: (url, as) => {
+      if (true) warnUrl();
+      return router.replace(url, as);
+    },
+    replaceTo: (href, as) => {
+      if (true) warnUrl();
+      var replaceRoute = as ? href : '';
+      var replaceUrl = as || href;
+      return router.replace(replaceRoute, replaceUrl);
+    }
+  };
+}
+
+/***/ }),
+
 /***/ "./node_modules/next/link.js":
 /*!***********************************!*\
   !*** ./node_modules/next/link.js ***!
@@ -2124,13 +2343,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var redux_saga__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! redux-saga */ "redux-saga");
 /* harmony import */ var redux_saga__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(redux_saga__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/AppLayout */ "./components/AppLayout.js");
-/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../reducers */ "./reducers/index.js");
-/* harmony import */ var _sagas__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../sagas */ "./sagas/index.js");
-/* harmony import */ var _reducers_user__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../reducers/user */ "./reducers/user.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! axios */ "axios");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-helmet */ "react-helmet");
+/* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_helmet__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var next_app__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! next/app */ "./node_modules/next/app.js");
+/* harmony import */ var next_app__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_app__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _components_AppLayout__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/AppLayout */ "./components/AppLayout.js");
+/* harmony import */ var _reducers__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../reducers */ "./reducers/index.js");
+/* harmony import */ var _sagas__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../sagas */ "./sagas/index.js");
+/* harmony import */ var _reducers_user__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../reducers/user */ "./reducers/user.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_14__);
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
 
 
 
@@ -2150,12 +2375,45 @@ const NodeBird = ({
   store,
   pageProps
 }) => {
-  return __jsx(react_redux__WEBPACK_IMPORTED_MODULE_6__["Provider"], {
+  return __jsx(next_app__WEBPACK_IMPORTED_MODULE_9__["Container"], null, __jsx(react_redux__WEBPACK_IMPORTED_MODULE_6__["Provider"], {
     store: store
-  }, __jsx(next_head__WEBPACK_IMPORTED_MODULE_1___default.a, null, __jsx("title", null, "\uC77C\uB2E8 \uAC00\uBCF4\uC790"), __jsx("link", {
-    rel: "stylesheet",
-    href: "https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css"
-  })), __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_8__["default"], null, __jsx(Component, pageProps)));
+  }, __jsx(react_helmet__WEBPACK_IMPORTED_MODULE_8___default.a, {
+    title: "\uC77C\uB2E8 \uAC00\uBCF4\uC790",
+    htmlAttributes: {
+      lang: 'ko'
+    },
+    meta: [{
+      charSet: 'UTF-8'
+    }, {
+      name: 'viewport',
+      content: 'width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover'
+    }, {
+      'http-equiv': 'X-UA-Compatible',
+      content: 'IE=edge'
+    }, {
+      name: 'description',
+      content: '지역활성화 SNS'
+    }, {
+      name: 'og.title',
+      content: 'DOUNT'
+    }, {
+      name: 'og.description',
+      content: '지역활성화 SNS'
+    }, {
+      property: 'og.type',
+      content: 'website'
+    }],
+    link: [{
+      rel: 'stylesheet',
+      href: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css'
+    }, {
+      rel: 'stylesheet',
+      href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
+    }, {
+      rel: 'stylesheet',
+      href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
+    }]
+  }), __jsx(_components_AppLayout__WEBPACK_IMPORTED_MODULE_10__["default"], null, __jsx(Component, pageProps))));
 };
 
 NodeBird.propTypes = {
@@ -2173,19 +2431,19 @@ NodeBird.getInitialProps = async context => {
   const cookie = ctx.isServer ? ctx.req.headers.cookie : '';
 
   if (ctx.isServer && cookie) {
-    axios__WEBPACK_IMPORTED_MODULE_12___default.a.defaults.headers.Cookie = cookie;
+    axios__WEBPACK_IMPORTED_MODULE_14___default.a.defaults.headers.Cookie = cookie;
   }
 
   if (!state.user.me) {
     //서버쪽에서 데이터를 불러오기
     ctx.store.dispatch({
       //ssr을 하기 위한 것
-      type: _reducers_user__WEBPACK_IMPORTED_MODULE_11__["LOAD_USER_REQUEST"]
+      type: _reducers_user__WEBPACK_IMPORTED_MODULE_13__["LOAD_USER_REQUEST"]
     });
   }
 
   if (context.Component.getInitialProps) {
-    pageProps = await context.Component.getInitialProps(ctx);
+    pageProps = (await context.Component.getInitialProps(ctx)) || {};
   }
 
   return {
@@ -2201,8 +2459,8 @@ const configureStore = (initialState, options) => {
   // }]; redux-saga에서 에러터질때 확인하기
 
   const enhancer =  false ? undefined : Object(redux__WEBPACK_IMPORTED_MODULE_5__["compose"])(Object(redux__WEBPACK_IMPORTED_MODULE_5__["applyMiddleware"])(...middlewares), !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f);
-  const store = Object(redux__WEBPACK_IMPORTED_MODULE_5__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_9__["default"], initialState, enhancer);
-  store.sagaTask = sagaMiddleware.run(_sagas__WEBPACK_IMPORTED_MODULE_10__["default"]);
+  const store = Object(redux__WEBPACK_IMPORTED_MODULE_5__["createStore"])(_reducers__WEBPACK_IMPORTED_MODULE_11__["default"], initialState, enhancer);
+  store.sagaTask = sagaMiddleware.run(_sagas__WEBPACK_IMPORTED_MODULE_12__["default"]);
   return store;
 };
 
@@ -2413,7 +2671,7 @@ const rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"]
 /*!**************************!*\
   !*** ./reducers/post.js ***!
   \**************************/
-/*! exports provided: initialState, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, REMOVE_IMAGE, ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, default */
+/*! exports provided: initialState, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, REMOVE_IMAGE, ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS, LOAD_POST_FAILURE, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2453,30 +2711,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_REQUEST", function() { return REMOVE_POST_REQUEST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_SUCCESS", function() { return REMOVE_POST_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_FAILURE", function() { return REMOVE_POST_FAILURE; });
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "./node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
-/* harmony import */ var _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
-
-
-
-
-
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = _babel_runtime_corejs2_core_js_object_keys__WEBPACK_IMPORTED_MODULE_5___default()(object); if (_babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default.a) { var symbols = _babel_runtime_corejs2_core_js_object_get_own_property_symbols__WEBPACK_IMPORTED_MODULE_4___default()(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { Object(_babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_6__["default"])(target, key, source[key]); }); } else if (_babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default.a) { _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1___default()(target, _babel_runtime_corejs2_core_js_object_get_own_property_descriptors__WEBPACK_IMPORTED_MODULE_2___default()(source)); } else { ownKeys(source).forEach(function (key) { _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default()(target, key, _babel_runtime_corejs2_core_js_object_get_own_property_descriptor__WEBPACK_IMPORTED_MODULE_3___default()(source, key)); }); } } return target; }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_REQUEST", function() { return LOAD_POST_REQUEST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_SUCCESS", function() { return LOAD_POST_SUCCESS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOAD_POST_FAILURE", function() { return LOAD_POST_FAILURE; });
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "immer");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(immer__WEBPACK_IMPORTED_MODULE_0__);
 
 const initialState = {
   mainPosts: [],
@@ -2492,7 +2731,7 @@ const initialState = {
   isAddingComment: false,
   addCommentErrorReason: '',
   commentAdded: false,
-  hasMorePost: false
+  singlePost: null
 };
 const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
 const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
@@ -2528,222 +2767,201 @@ const RETWEET_FAILURE = 'RETWEET_FAILURE';
 const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+const LOAD_POST_REQUEST = 'LOAD_POST_REQUEST';
+const LOAD_POST_SUCCESS = 'LOAD_POST_SUCCESS';
+const LOAD_POST_FAILURE = 'LOAD_POST_FAILURE';
 /* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
-  switch (action.type) {
-    case UPLOAD_IMAGES_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+  return immer__WEBPACK_IMPORTED_MODULE_0___default()(state, draft => {
+    switch (action.type) {
+      case UPLOAD_IMAGES_REQUEST:
+        {
+          break;
+        }
 
-    case UPLOAD_IMAGES_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          imagePaths: [...state.imagePaths, ...action.data]
-        });
-      }
+      case UPLOAD_IMAGES_SUCCESS:
+        {
+          action.data.forEach(p => {
+            draft.imagePaths.push(p);
+          });
+          break;
+        }
 
-    case UPLOAD_IMAGES_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case UPLOAD_IMAGES_FAILURE:
+        {
+          break;
+        }
 
-    case REMOVE_IMAGE:
-      {
-        return _objectSpread({}, state, {
-          imagePaths: state.imagePaths.filter((v, i) => i !== action.index)
-        });
-      }
+      case REMOVE_IMAGE:
+        {
+          const index = draft.imagePaths.findIndex((v, i) => i === action.index);
+          draft.imagePaths.splice(index, 1);
+          break;
+        }
 
-    case ADD_POST_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: true,
-          addPostErrorReason: '',
-          postAdded: false
-        });
-      }
+      case ADD_POST_REQUEST:
+        {
+          draft.isAddingPost = true;
+          draft.addingPostErrorReason = '';
+          draft.postAdded = false;
+          break;
+        }
 
-    case ADD_POST_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: false,
-          mainPosts: [action.data, ...state.mainPosts],
-          postAdded: true,
-          imagePaths: []
-        });
-      }
+      case ADD_POST_SUCCESS:
+        {
+          draft.isAddingPost = false;
+          draft.mainPosts.unshift(action.data);
+          draft.postAdded = true;
+          draft.imagePaths = [];
+          break;
+        }
 
-    case ADD_POST_FAILURE:
-      {
-        return _objectSpread({}, state, {
-          isAddingPost: false,
-          addPostErrorReason: action.error
-        });
-      }
+      case ADD_POST_FAILURE:
+        {
+          draft.isAddingPost = false;
+          draft.addPostErrorReason = action.error;
+          break;
+        }
 
-    case ADD_COMMENT_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          isAddingComment: true,
-          addCommentErrorReason: '',
-          commentAdded: false
-        });
-      }
+      case ADD_COMMENT_REQUEST:
+        {
+          draft.isAddingComment = true;
+          draft.addCommentErrorReason = '';
+          draft.commentAdded = false;
+          break;
+        }
 
-    case ADD_COMMENT_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Comments = [...post.Comments, action.data.comment];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Comments
-        });
-        return _objectSpread({}, state, {
-          isAddingComment: false,
-          mainPosts,
-          commentAdded: true
-        });
-      }
+      case ADD_COMMENT_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Comments.push(action.data.comment);
+          draft.isAddingComment = false;
+          draft.commentAdded = true;
+          break;
+        }
 
-    case ADD_COMMENT_FAILURE:
-      {
-        return _objectSpread({}, state, {
-          isAddingComment: false,
-          addCommentErrorReason: action.error
-        });
-      }
+      case ADD_COMMENT_FAILURE:
+        {
+          draft.isAddingComment = false;
+          draft.addingPostErrorReason = action.error;
+          break;
+        }
 
-    case LOAD_COMMENTS_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Comments = action.data.comments;
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Comments
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case LOAD_COMMENTS_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Comments = action.data.comments;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_REQUEST:
-    case LOAD_HASHTAG_POSTS_REQUEST:
-    case LOAD_USER_POSTS_REQUEST:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: action.lastId === 0 ? [] : state.mainPosts,
-          hasMorePost: action.lastId ? state.hasMorePost : true
-        });
-      }
+      case LOAD_MAIN_POSTS_REQUEST:
+      case LOAD_HASHTAG_POSTS_REQUEST:
+      case LOAD_USER_POSTS_REQUEST:
+        {
+          draft.mainPosts = !action.lastId ? [] : draft.mainPosts;
+          draft.hasMorePost = action.lastId ? draft.hasMorePost : true;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_SUCCESS:
-    case LOAD_HASHTAG_POSTS_SUCCESS:
-    case LOAD_USER_POSTS_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: state.mainPosts.concat(action.data),
-          hasMorePost: action.data.length === 10
-        });
-      }
+      case LOAD_MAIN_POSTS_SUCCESS:
+      case LOAD_HASHTAG_POSTS_SUCCESS:
+      case LOAD_USER_POSTS_SUCCESS:
+        {
+          action.data.forEach(d => {
+            draft.mainPosts.push(d);
+          });
+          draft.hasMorePost = action.data.length === 10;
+          break;
+        }
 
-    case LOAD_MAIN_POSTS_FAILURE:
-    case LOAD_HASHTAG_POSTS_FAILURE:
-    case LOAD_USER_POSTS_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case LOAD_MAIN_POSTS_FAILURE:
+      case LOAD_HASHTAG_POSTS_FAILURE:
+      case LOAD_USER_POSTS_FAILURE:
+        {
+          break;
+        }
 
-    case LIKE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case LIKE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case LIKE_POST_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Likers = [{
-          id: action.data.userId
-        }, ...post.Likers];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Likers
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case LIKE_POST_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          draft.mainPosts[postIndex].Likers.unshift({
+            id: action.data.userId
+          });
+          break;
+        }
 
-    case LIKE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case LIKE_POST_FAILURE:
+        {
+          break;
+        }
 
-    case UNLIKE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case UNLIKE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case UNLIKE_POST_SUCCESS:
-      {
-        const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-        const post = state.mainPosts[postIndex];
-        const Likers = post.Likers.filter(v => v.id !== action.data.userId);
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = _objectSpread({}, post, {
-          Likers
-        });
-        return _objectSpread({}, state, {
-          mainPosts
-        });
-      }
+      case UNLIKE_POST_SUCCESS:
+        {
+          const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+          const likeIndex = draft.mainPosts[postIndex].Likers.findIndex(v => v.id === action.data.userId);
+          draft.mainPosts[postIndex].Likers.splice(likeIndex, 1);
+          break;
+        }
 
-    case UNLIKE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case UNLIKE_POST_FAILURE:
+        {
+          break;
+        }
 
-    case RETWEET_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case RETWEET_REQUEST:
+        {
+          break;
+        }
 
-    case RETWEET_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: [action.data, ...state.mainPosts]
-        });
-      }
+      case RETWEET_SUCCESS:
+        {
+          draft.mainPosts.unshift(action.data);
+          break;
+        }
 
-    case RETWEET_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case RETWEET_FAILURE:
+        {
+          break;
+        }
 
-    case REMOVE_POST_REQUEST:
-      {
-        return _objectSpread({}, state);
-      }
+      case REMOVE_POST_REQUEST:
+        {
+          break;
+        }
 
-    case REMOVE_POST_SUCCESS:
-      {
-        return _objectSpread({}, state, {
-          mainPosts: state.mainPosts.filter(v => v.id !== action.data)
-        });
-      }
+      case REMOVE_POST_SUCCESS:
+        {
+          const index = draft.mainPosts.findIndex(v => v.id === action.data);
+          draft.mainPosts.splice(index, 1);
+          break;
+        }
 
-    case REMOVE_POST_FAILURE:
-      {
-        return _objectSpread({}, state);
-      }
+      case REMOVE_POST_FAILURE:
+        {
+          break;
+        }
 
-    default:
-      {
-        return _objectSpread({}, state);
-      }
-  }
+      case LOAD_POST_SUCCESS:
+        {
+          draft.singlePost = action.data;
+          break;
+        }
+
+      default:
+        {
+          break;
+        }
+    }
+  });
 });
 
 /***/ }),
@@ -2752,7 +2970,7 @@ const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 /*!**************************!*\
   !*** ./reducers/user.js ***!
   \**************************/
-/*! exports provided: initialState, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, FOLLOW_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, EDIT_NICKNAME_REQUEST, EDIT_NICKNAME_SUCCESS, EDIT_NICKNAME_FAILURE, ADD_POST_TO_ME, REMOVE_POST_TO_ME, default */
+/*! exports provided: initialState, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWINGS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, FOLLOW_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, REMOVE_FOLLOWER_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, EDIT_NICKNAME_REQUEST, EDIT_NICKNAME_SUCCESS, EDIT_NICKNAME_FAILURE, ADD_POST_TO_ME, REMOVE_POST_OF_ME, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2789,7 +3007,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_NICKNAME_SUCCESS", function() { return EDIT_NICKNAME_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_NICKNAME_FAILURE", function() { return EDIT_NICKNAME_FAILURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_POST_TO_ME", function() { return ADD_POST_TO_ME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_TO_ME", function() { return REMOVE_POST_TO_ME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "REMOVE_POST_OF_ME", function() { return REMOVE_POST_OF_ME; });
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_corejs2_core_js_object_define_property__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_corejs2_core_js_object_define_properties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "./node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
@@ -2879,7 +3097,7 @@ const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
 const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
-const REMOVE_POST_TO_ME = 'REMOVE_POST_TO_ME';
+const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 /* harmony default export */ __webpack_exports__["default"] = ((state = initialState, action) => {
   switch (action.type) {
     case LOG_IN_REQUEST:
@@ -3023,7 +3241,7 @@ const REMOVE_POST_TO_ME = 'REMOVE_POST_TO_ME';
         });
       }
 
-    case REMOVE_POST_TO_ME:
+    case REMOVE_POST_OF_ME:
       {
         return _objectSpread({}, state, {
           me: _objectSpread({}, state.me, {
@@ -3207,7 +3425,6 @@ function* watchAddPost() {
 }
 
 function loadMainPostsAPI(lastId = 0, limit = 10) {
-  console.log('last아이디', lastId);
   return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
 
@@ -3231,7 +3448,6 @@ function* watchLoadMainPosts() {
 }
 
 function loadHashtagPostsAPI(tag, lastId = 0) {
-  console.log('lastId', lastId);
   return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`/hashtag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=10`);
 }
 
@@ -3240,8 +3456,7 @@ function* loadHashtagPosts(action) {
     const result = yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["call"])(loadHashtagPostsAPI, action.data, action.lastId);
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
       type: _reducers_post__WEBPACK_IMPORTED_MODULE_2__["LOAD_HASHTAG_POSTS_SUCCESS"],
-      data: result.data,
-      lastId: action.lastId
+      data: result.data
     });
   } catch (e) {
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
@@ -3447,21 +3662,21 @@ function* watchRetweet() {
   yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["RETWEET_REQUEST"], retweet);
 }
 
-function removeAPI(postId) {
+function removePostAPI(postId) {
   return axios__WEBPACK_IMPORTED_MODULE_1___default.a.delete(`/post/${postId}`, {
     withCredentials: true
   });
 }
 
-function* remove(action) {
+function* removePost(action) {
   try {
-    const result = yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["call"])(removeAPI, action.data);
+    const result = yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["call"])(removePostAPI, action.data);
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
       type: _reducers_post__WEBPACK_IMPORTED_MODULE_2__["REMOVE_POST_SUCCESS"],
       data: result.data
     });
     yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
-      type: REMOVE_POST_OF_ME,
+      type: _reducers_user__WEBPACK_IMPORTED_MODULE_3__["REMOVE_POST_OF_ME"],
       data: result.data
     });
   } catch (e) {
@@ -3473,12 +3688,36 @@ function* remove(action) {
   }
 }
 
-function* watchRemove() {
-  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["REMOVE_POST_REQUEST"], remove);
+function* watchRemovePost() {
+  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["REMOVE_POST_REQUEST"], removePost);
+}
+
+function loadPostAPI(postId) {
+  return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`/post/${postId}`);
+}
+
+function* loadPost(action) {
+  try {
+    const result = yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["call"])(loadPostAPI, action.data);
+    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
+      type: _reducers_post__WEBPACK_IMPORTED_MODULE_2__["LOAD_POST_SUCCESS"],
+      data: result.data
+    });
+  } catch (e) {
+    console.error(e);
+    yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["put"])({
+      type: _reducers_post__WEBPACK_IMPORTED_MODULE_2__["LOAD_POST_FAILURE"],
+      error: e
+    });
+  }
+}
+
+function* watchLoadPost() {
+  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["takeLatest"])(_reducers_post__WEBPACK_IMPORTED_MODULE_2__["LOAD_POST_REQUEST"], loadPost);
 }
 
 function* postSaga() {
-  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadMainPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchAddPost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchAddComment), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadComments), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadHashtagPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadUserPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchUploadImages), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLikePost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchUnlikePost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchRetweet), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchRemove)]);
+  yield Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["all"])([Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadMainPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchAddPost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchAddComment), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadComments), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadHashtagPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadUserPosts), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchUploadImages), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLikePost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchUnlikePost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchRetweet), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchRemovePost), Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_0__["fork"])(watchLoadPost)]);
 }
 
 /***/ }),
@@ -3960,6 +4199,17 @@ module.exports = require("core-js/library/fn/weak-map");
 
 /***/ }),
 
+/***/ "immer":
+/*!************************!*\
+  !*** external "immer" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("immer");
+
+/***/ }),
+
 /***/ "next-redux-saga":
 /*!**********************************!*\
   !*** external "next-redux-saga" ***!
@@ -4034,6 +4284,17 @@ module.exports = require("prop-types-exact");
 /***/ (function(module, exports) {
 
 module.exports = require("react");
+
+/***/ }),
+
+/***/ "react-helmet":
+/*!*******************************!*\
+  !*** external "react-helmet" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-helmet");
 
 /***/ }),
 

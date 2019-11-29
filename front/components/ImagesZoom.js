@@ -2,16 +2,50 @@ import React, { useState} from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import Slick from 'react-slick';
+import styled from 'styled-components';
+
+const Overlay = styled.div`
+  position: fixed;
+  z-index: 5000;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+`;
+
+const Header = styled.header`
+  height:44;
+  background: white;
+  position: relative;
+  padding:0;
+  text-align: center;
+`;
+
+const H1 = styled.h1`
+  margin:0;
+  font-size: 17px;
+  color: #333;
+  line-height: 44px
+`;
+
+const HeaderIcon = styled(Icon)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15;
+  line-height: 14px;
+  cursor: pointer;
+`;
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
-    <div style={{ position: 'fixed', zIndex: 5000, top: 0, left: 0, right: 0, bottom: 0 }}>
-      <header style={{ height: 44, background: 'white', position: 'relative', padding: 0, textAlign: 'center'}}>
-        <h1 style={{ margin: 0, fontSize: '17px', color: '#333', lineHeight: '44px' }}>상세 이미지</h1>
-        <Icon type="close" onClick={onClose} style={{ position: 'absolute', right: 0, top: 0, padding: 15, lineHeight: '14px', cursor: 'pointer' }} />
-      </header>
+    <Overlay>
+      <Header>
+        <H1>상세 이미지</H1>
+        <HeaderIcon type="close" onClick={onClose} />
+      </Header>
       <div style={{ height: 'calc(100% - 44px)', background: '#090909' }}>
         <div>
           <Slick
@@ -37,7 +71,7 @@ const ImagesZoom = ({ images, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Overlay>
   );
 };
 

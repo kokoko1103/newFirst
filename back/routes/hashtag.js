@@ -41,6 +41,8 @@ router.get('/:tag', async(req, res, next) => {
             order:[['createdAt','DESC']],
             limit: parseInt(req.query.limit,10)
         });
+        console.log('간다ㅏㄹㅁ아라밍럼이ㅏ러미아러');
+        console.log('req.query.lastId',req.query.lastId);
         return res.json(result)
     }catch(err){
         console.log(err);
